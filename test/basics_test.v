@@ -14,8 +14,8 @@ Definition fun1: string := "fun1".
 Definition prod5: string := "prod5". 
 
 Check <{x}>.
-Check <{fun prod5 [x] {mult x ([>5])} 5}>.
-Check <{x (fun prod5 [x] {mult x 5})}>.
+Check <{app fun prod5 [x] {mult x ([>5])} $ 5 $}>.
+Check <{app x $ fun prod5 [x] {mult x 5} $}>.
 Check <{val n = 25 ; mult n 2}>.
 Check <{[4 >> 2][5 >> 5][6 >> 4][ > 5]}>.
 Check <{uid}>.
@@ -29,9 +29,9 @@ Compute (<{/x:=5/ (mult x y)}>).
 
 Compute (<{ /y:=10/ fun prod5 [x] {mult x (mult y ([>5])) } }>).
 
-Compute <{/x:=4/ (x (fun prod5 [x] {mult x 5}))}>.
+Compute <{/x:=4/ (app x $(fun prod5 [x] {mult x 5})$)}>.
 
-Compute <{/prod5:=4/ (x (fun prod5 [x] {mult x 5}))}>.
+Compute <{/prod5:=4/ (app x $ (fun prod5 [x] {mult x 5})$)}>.
 
 Compute (bounded <{x}> nil).
 

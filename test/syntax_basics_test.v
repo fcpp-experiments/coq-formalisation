@@ -19,8 +19,10 @@ Hint Unfold y : core.
 Hint Unfold z : core.
 
 Check <{x}>.
-Check <{fun prod5 [x] {mult (x) ([>5])} 5}>.
-Check <{x (fun prod5 [x] {mult (x) (5)})}>.
+Check <{mult (x) ([>6]) }>.
+Check <{fun prod5 [x] {mult (x) ([>5])}}> : exp.
+Check <{app fun prod5 [x] {mult (x) ([>5])} $ 5 $}>.
+Check <{app x $ (fun prod5 [x] {mult (x) (5)})$}>.
 Check <{val n = 25 ; mult (n) (2)}>.
 Check <{[4 >> 2][5 >> 5][6 >> 4][ > 5]}>.
 

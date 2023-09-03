@@ -79,12 +79,12 @@ Notation "'false'" := false (at level 1).
 Notation "'false'" := l_false (in custom acnotation at level 0).
 
 Notation "'exchange'" := (b_exchange) (in custom acnotation at level 0).
-Notation "'nfold'" := (b_nfold) (in custom acnotation at level 0).
-Notation "'self'" := (b_self) (in custom acnotation at level 0).
+Notation "'nfold' f v e" := (exp_app_3 b_nfold f v e) (in custom acnotation at level 0).
+Notation "'self' e" := (exp_app_1 b_self e) (in custom acnotation at level 0).
 Notation "'uid'" := (b_uid) (in custom acnotation at level 0).
 Notation "'succ'" := (b_succ) (in custom acnotation at level 0).
 Notation "'pred'" := (b_pred) (in custom acnotation at level 0).
-Notation "'mult'" := (b_mult) (in custom acnotation at level 0).
+Notation "'mult' x y" := (exp_app_2 b_mult x y) (in custom acnotation at level 0, x custom acnotation).
 
 Notation "[ > l ]" := (default l) (in custom acnotation at level 30).
 Notation "[ x >> y ] m" := ( device x y m)(in custom acnotation at level 30,

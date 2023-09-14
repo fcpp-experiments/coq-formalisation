@@ -1,3 +1,5 @@
+compcert/Coqlib.v
+compcert/Maps.v
 xc/syntax.v
 lib/basics.v
 lib/nvalues.v

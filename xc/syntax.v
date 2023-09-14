@@ -9,6 +9,8 @@ Require Import Strings.String.
 Require Import PeanoNat.
 Require Import Bool.
 Require Import List.
+Require Import Maps.
+Require Import Coq.Strings.BinaryString.
 
 (** The identifier of a device is seen as natural number*)
 Definition ident := nat.
@@ -16,6 +18,7 @@ Definition ident := nat.
 Inductive ty : Type :=
   | Ty_Builtin : Type -> ty
   | Ty_Arrow : ty -> ty -> ty.
+
 
 
 (** SYNTAX of an EXPRESSION, including LITERALS and NVALUES*)
@@ -36,8 +39,7 @@ with literal :=
   | l_false : literal
   | l_const : nat -> literal
 with nvalue :=
-  | default: literal -> nvalue
-  | device (n:ident) : literal -> nvalue -> nvalue
+  | nv (m:PMap.t literal): nvalue
 with builtin :=
   | b_exchange : builtin
   | b_nfold : builtin
@@ -89,8 +91,8 @@ Notation "'succ'" := (b_succ) (in custom acnotation at level 0).
 Notation "'pred'" := (b_pred) (in custom acnotation at level 0).
 Notation "'mult'" := (b_mult) (in custom acnotation at level 0).
 
-Notation "[ > l ]" := (default l) (in custom acnotation at level 30).
-Notation "[ x >> y ] m" := ( device x y m)(in custom acnotation at level 30,
+Notation "[ > l ]" := (PMap.init l) (in custom acnotation at level 30).
+Notation "[ x >> y ] m" := (PMap.set x y m)(in custom acnotation at level 30,
                                             x at level 99, 
                                             y at level 99, 
                                             m custom acnotation at level 30).

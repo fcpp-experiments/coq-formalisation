@@ -10,7 +10,7 @@ Require Import PeanoNat.
 Require Import Bool.
 Require Import List.
 Require Import Maps.
-Require Import Coq.Strings.BinaryString.
+Require Import Coq.PArith.BinPosDef.
 
 (** The identifier of a device is seen as natural number*)
 Definition ident := nat.
@@ -30,9 +30,9 @@ Inductive exp: Type :=
   | exp_val : string -> exp -> exp -> exp
   | exp_literal : literal -> exp
   | exp_nvalue : nvalue -> exp
+  | l_abs : string -> string -> ty -> exp -> exp 
 with literal :=
   | l_builtin : builtin -> literal
-  | l_abs : string -> string -> ty -> exp -> literal 
   | l_sensor: string -> literal
   | l_fail : literal
   | l_true : literal
@@ -48,6 +48,19 @@ with builtin :=
   | b_succ : builtin
   | b_pred : builtin 
   | b_mult : builtin.
+
+Fixpoint exp_measure (e : exp) {struct e} : nat :=
+  let measure_lit (l:literal) : nat := match l with
+                                       | _ => 1 end
+  in
+  match e with
+  | exp_var _ => 1
+  | exp_app e1 e2 => 1 + exp_measure e1 + exp_measure e2
+  | exp_val _ e1 e2 => 1 + exp_measure e1 + exp_measure e2
+  | exp_literal l => 1 + measure_lit l
+  | l_abs _ _ _ e1 => 1 + exp_measure e1
+  | exp_nvalue (nv (e1,t)) => 1 + measure_lit e1 (*+ PTree.fold1 (fun x e => x + measure_lit e) t 0 *)
+  end.
 
 Declare Custom Entry acnotation.
 
@@ -91,8 +104,8 @@ Notation "'succ'" := (b_succ) (in custom acnotation at level 0).
 Notation "'pred'" := (b_pred) (in custom acnotation at level 0).
 Notation "'mult'" := (b_mult) (in custom acnotation at level 0).
 
-Notation "[ > l ]" := (PMap.init l) (in custom acnotation at level 30).
-Notation "[ x >> y ] m" := (PMap.set x y m)(in custom acnotation at level 30,
+Notation "[ > l ]" := (nv (PMap.init l)) (in custom acnotation at level 30).
+Notation "[ x >> y ] m" := (nv (PMap.set (Pos.of_nat x) y (match m with (nv m') => m' end)))(in custom acnotation at level 30,
                                             x at level 99, 
                                             y at level 99, 
                                             m custom acnotation at level 30).
@@ -101,9 +114,9 @@ Notation "'FAIL'" := (l_fail) (in custom acnotation at level 0).
 
 Notation "'sensor' x" := (l_sensor x) (in custom acnotation at level 0, x custom acnotation at level 0).
 
-
 Coercion exp_var : string >-> exp.
 Coercion l_builtin : builtin >-> literal.
 Coercion exp_literal: literal >-> exp.
 Coercion l_const: nat >-> literal.
 Coercion exp_nvalue: nvalue >-> exp.
+

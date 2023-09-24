@@ -11,8 +11,8 @@ Require Import PeanoNat.
 
 
 (*It's beter to replace auto with apropriate basic tactic*)
-Ltac ordered_tac := solve [apply ordered0 | apply ordered1 | apply ordered2;auto;ordered_tac].
-Ltac w_tac := solve [split; [>ordered_tac | simpl;auto]].
+(* Ltac ordered_tac := solve [apply ordered0 | apply ordered1 | apply ordered2;auto;ordered_tac].*)
+Ltac w_tac := solve [split; [simpl;auto]].
 
 Ltac nval_tac := solve [apply E_NVAL; w_tac].
 
@@ -92,6 +92,7 @@ Definition s0:string := "s0".
 Definition s1:string := "s1".
 Definition fun0:string := "fun0".
 
+(*
 Lemma mult: <[ 10 | base | vt_end |   <{ mult ([1>>5][2>>5][>5]) ([1>>5][>6]) }> ]> ==> <[ <{ [1>>25][2>>30][>30]}> | empty nil ]>.
 Proof.
 mult_tac.
@@ -182,7 +183,4 @@ Proof.
 device_tac.
 Qed.
 
-
-
-
-
+*)

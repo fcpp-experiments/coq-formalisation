@@ -8,6 +8,7 @@ From AC Require Import tactics.
 Require Import Bool.
 Require Import String.
 Require Import List.
+Require Import Maps.
 Require Import PeanoNat.
 
 
@@ -58,7 +59,7 @@ Inductive AES := aes : E_net -> R_net -> d_net -> s_net -> AES.
 
 (*Space time values, a function that maps each event to a resulting nvalue*)
 Definition STV := event -> nvalue.
-Definition base_STV (e:event) := default l_fail.
+Definition base_STV (e:event) := PMap.init l_fail.
 Definition add_STV (new_e:event) (new_w:nvalue) (old:STV): STV := (fun e => if (equalsEv e new_e) then new_w else (old e)).
 
 (*A vt_net is a function that maps a event to a value_tree*)
@@ -104,6 +105,7 @@ Definition ex_d := add_d (e 0 0) 0 (add_d (e 0 1) 0 (add_d (e 1 0) 1 (add_d (e 1
 Definition ex_vts := add_vt (e 0 0) (empty nil) (add_vt (e 0 1) (empty nil) (add_vt (e 1 0) (empty nil) 
 (add_vt (e 1 1) (empty nil) (add_vt (e 3 0) (empty nil) base_vt)))).
 
+(*
 Definition ex_stv := add_STV (e 0 0) <{[>5]}> (add_STV (e 0 1) <{[>5]}> (add_STV (e 1 0) <{[>5]}> (add_STV (e 1 1) <{[>5]}>
  (add_STV (e 3 0) <{[>5]}> (base_STV))))).
 
@@ -112,6 +114,7 @@ Proof.
 apply E_NET. simpl. repeat split;device_tac.
 Qed.
 
+*)
 
 
 

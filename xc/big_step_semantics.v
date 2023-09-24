@@ -6,6 +6,7 @@ From AC Require Import nvalues.
 Require Import Bool.
 Require Import String.
 Require Import List.
+Require Import Maps.
 Require Import PeanoNat.
 
 
@@ -23,18 +24,19 @@ match l0,l1 with
 end.
 
 Reserved Notation "t '==>' t'" (at level 40).
+
 Inductive bigstep : conf_in -> conf_out -> Prop :=
 
   | E_NVAL : forall (id:ident) (sigma:sensor_state) (env:value_tree_env)  
              (w:nvalue), w_value w -> <[ id | sigma | env | <{w}> ]> ==> <[ <{w}> | empty nil ]> 
 
   | E_LIT : forall (id:ident) (sigma:sensor_state) (env:value_tree_env) 
-            (l:literal), value l -> <[ id | sigma | env | <{l}> ]>  ==>  <[ <{[>l]}> | empty nil ]> 
+            (l:literal), value l -> <[ id | sigma | env | <{l}> ]>  ==>  <[ <{[> l]}> | empty nil ]> 
 
   | E_VAR : forall (id:ident) (sigma:sensor_state) (env:value_tree_env)
-            (w:nvalue) x,
-            w_value w ->
-            w=(sigma x) -> <[ id | sigma | env | <{x}> ]>  ==>  <[ <{w}> | empty nil ]> 
+            (w: nvalue) x,
+            w=(getSens x sigma) ->
+            w_value w -> <[ id | sigma | env | <{x}> ]>  ==>  <[ <{w}> | empty nil ]> 
 
   | E_VAL: forall (id:ident) (sigma:sensor_state) (env:value_tree_env)
             x (w1:nvalue) (w2:nvalue) e1 e2 (theta1:value_tree) (theta2:value_tree), 
@@ -66,7 +68,7 @@ Inductive bigstep : conf_in -> conf_out -> Prop :=
   | A_SENS : forall (id:ident) (sigma:sensor_state) (env:value_tree_env)
             (w:nvalue) s,
             w_value w ->
-            w=(sigma s) -> <[ id | sigma | env | <{sensor s}> ]>  ==>  <[ <{w}> | empty nil ]> 
+            w=(getSens s sigma) -> <[ id | sigma | env | <{sensor s}> ]>  ==>  <[ <{w}> | empty nil ]> 
 
   | A_SELF :  forall (id:ident) (sigma:sensor_state) (env:value_tree_env) (w:nvalue) (l:literal),
             w_value w ->
@@ -100,12 +102,5 @@ Inductive bigstep : conf_in -> conf_out -> Prop :=
             <[ id | sigma | env | <{exchange w_i w_f}> ]>  ==> <[ <{w_r}> | some w_r (cons theta nil) ]> 
  
 where "t '==>' t'" := (bigstep t t').
-
-
-
-
-
-
-
 
 

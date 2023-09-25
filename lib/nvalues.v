@@ -25,7 +25,7 @@ Fixpoint string_to_pos (s : string) : positive :=
 (*get single device value*)
 Fixpoint get (pos:ident) (n:nvalue): literal :=
 match n with
-| nv m => PMap.get (Pos.of_nat pos) m
+| nv m => PMap.get (Pos.of_nat (pos+1)) m
 end.
 
 Fixpoint getDefault (n:nvalue): literal :=

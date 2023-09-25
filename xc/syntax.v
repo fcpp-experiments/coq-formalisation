@@ -107,11 +107,11 @@ Notation "'mult'" := (b_mult) (in custom acnotation at level 0).
 Notation "[ > l ]" := l (in custom acnotation at level 30).
 Notation "[ >' l ]" := (nv (PMap.init (l_const l))) (in custom acnotation at level 30).
 Notation "[ >'' l ]" := (nv (PMap.init l)) (in custom acnotation at level 30).
-Notation "[ x >> y ] m" := (nv (PMap.set (Pos.of_nat x) y (match m with (nv m') => m' end)))(in custom acnotation at level 30,
+Notation "[ x >> y ] m" := (nv (PMap.set (Pos.of_nat (x+1)) y (match m with (nv m') => m' end)))(in custom acnotation at level 30,
                                             x at level 99, 
                                             y at level 99, 
                                  m custom acnotation at level 30).
-Notation "[ x >>' y ] m" := (nv (PMap.set (Pos.of_nat x) (l_const y) (match m with (nv m') => m' end)))(in custom acnotation at level 30,
+Notation "[ x >>' y ] m" := (nv (PMap.set (Pos.of_nat (x+1)) (l_const y) (match m with (nv m') => m' end)))(in custom acnotation at level 30,
                                             x at level 99, 
                                             y at level 99, 
                                             m custom acnotation at level 30).

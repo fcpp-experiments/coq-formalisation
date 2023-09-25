@@ -110,7 +110,12 @@ Notation "[ >'' l ]" := (nv (PMap.init l)) (in custom acnotation at level 30).
 Notation "[ x >> y ] m" := (nv (PMap.set (Pos.of_nat x) y (match m with (nv m') => m' end)))(in custom acnotation at level 30,
                                             x at level 99, 
                                             y at level 99, 
+                                 m custom acnotation at level 30).
+Notation "[ x >>' y ] m" := (nv (PMap.set (Pos.of_nat x) (l_const y) (match m with (nv m') => m' end)))(in custom acnotation at level 30,
+                                            x at level 99, 
+                                            y at level 99, 
                                             m custom acnotation at level 30).
+
 
 Notation "'FAIL'" := (l_fail) (in custom acnotation at level 0).
 

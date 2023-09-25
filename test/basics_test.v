@@ -17,12 +17,12 @@ Check <{x}>.
 Check <{fun prod5 [x:Nat] {mult x ([>5])} 5}>.
 Check <{x (fun prod5 [x:Nat] {mult x 5})}>.
 Check <{val n = 25 ; mult n 2}>.
-Check <{[4 >> 2][5 >> 5][6 >> 4][ > 5]}>.
+Check <{[4 >>' 2][5 >>' 5][6 >>' 4][ >' 5]}>.
 Check <{uid}>.
 Check <{self ([>6])}>.
 Check <{sensor x}>.
 Check <{FAIL}>.
-Check <{nfold ([> fun fun1 [x:Nat] {fun fun0  [y:Nat] {x}}]) ([0 >> 5][1 >> 3][ > 4 ]) ([> 5])}>.
+Check <{nfold ([> fun fun1 [x:Nat] {fun fun0  [y:Nat] {x}}]) ([0 >>' 5][1 >>' 3][ >' 4 ]) ([>' 5])}>.
 
 
 Compute (<{/x:=5/ (mult x y)}>).
@@ -40,12 +40,13 @@ Proof.
 simpl. auto.
 Qed.
 
-Lemma test2 : bounded <{[0 >> 5][>5]}> nil.
+Lemma test2 : bounded <{[0 >>' 5][>'5]}> nil.
 Proof.
-simpl. auto.
+simpl. split; auto. intros. destruct H. rewrite <- H. tauto. destruct H.
 Qed.
 
-Lemma test3 : bounded <{[0 >> (fun fun0 [x:Nat] {x})][>5]}> nil.
+(*
+Lemma test3 : bounded <{[0 >> (fun fun0 [x:Nat] {x})][>'5]}> nil.
 Proof.
 simpl. split. left. auto. auto. 
 Qed.
@@ -59,21 +60,27 @@ Lemma test4 : bounded <{nfold ([0 >> (fun fun0 [x:Nat] {mult x y})][>5]) ([0>>5]
 Proof.
 simpl. split. split. split. auto. 
 Abort.
+ *)
 
-Lemma w_test0 : w_value <{[>3]}>.
+Lemma w_test0 : w_value <{[>'3]}>.
 Proof.
-split. apply ordered0. simpl. auto.
+  split. tauto.
+  intuition.
 Qed.
 
-Lemma w_test1 : w_value <{[3 >> 2][2 >> 4][>3]}>.
+Lemma w_test1 : w_value <{[3 >>' 2][2 >>' 4][>'3]}>.
 Proof.
-split. apply ordered2. 
-Abort.
+  split. simpl; tauto. intuition.
+  destruct H. simpl in H. rewrite <- H. tauto.
+  destruct H. simpl in H. rewrite <- H. tauto.
+  destruct H.
+Qed.
 
+(*
 Lemma w_test2 :  w_value <{[1 >> (fun fun0 [x:Nat] {y})][2 >> 4][>3]}>.
 Proof.
 split. 
 - apply ordered2. auto. apply ordered1. 
 - simpl.
 Abort.
-
+*)

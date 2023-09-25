@@ -8,6 +8,7 @@ From AC Require Import tactics.
 Require Import Bool.
 Require Import String.
 Require Import List.
+Import ListNotations.
 Require Import Maps.
 Require Import PeanoNat.
 
@@ -27,17 +28,13 @@ Inductive relation := forward : event -> event -> relation.
 
 (*Equality of relations*)
 Definition equalsR (r0:relation) (r1:relation) := match (r0,r1) with 
-| (forward e0_in e0_out,forward e1_in e1_out) => if ((equalsEv e0_in e1_in) && (equalsEv e0_out e1_out)) then true else false end.
+| (forward e0_in e0_out,forward e1_in e1_out) => (equalsEv e0_in e1_in) && (equalsEv e0_out e1_out) end.
 
 (*A list of relationa*)
 Definition R_net := list relation.
 
 (*Function that checks if a list of relation contains a certain relation*)
-Fixpoint containsR (rel:relation) (rl:R_net) : bool :=
-match rl with 
-|cons r_el next => if (equalsR r_el rel) then true else (containsR rel next)
-|nil => false 
-end. 
+Fixpoint containsR (rel:relation) (rl:R_net) : bool := existsb (equalsR rel) rl.
 
 (*A d_net is a function that maps a event to a device*)
 Definition d_net := event -> ident.
@@ -94,11 +91,10 @@ end) n_E
 where "t '|=>' t'" := (net_val t t').
 
 
+Definition ex_E: E_net := [ (e 0 0) ; (e 0 1) ; (e 1 0) ; (e 1 1) ; (e 3 0) ].
 
-Definition ex_E: E_net := cons (e 0 0) (cons (e 0 1) (cons (e 1 0) (cons (e 1 1) (cons (e 3 0) nil)))).
-
-Definition ex_R: R_net := cons (forward (e 0 0) (e 0 1)) (cons (forward (e 1 0) (e 1 1))
- (cons (forward (e 3 0) (e 0 1)) (cons (forward (e 1 0) (e 0 1)) nil))).
+Definition ex_R: R_net := [ (forward (e 0 0) (e 0 1)) ; (forward (e 1 0) (e 1 1)) ;
+ (forward (e 3 0) (e 0 1)) ; (forward (e 1 0) (e 0 1)) ].
 
 Definition ex_d := add_d (e 0 0) 0 (add_d (e 0 1) 0 (add_d (e 1 0) 1 (add_d (e 1 1) 1 (add_d (e 3 0) 3 (base_d))))).
 

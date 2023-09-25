@@ -14,7 +14,7 @@ Definition getSens (n:string) (s:sensor_state) := PMap.get (string_to_pos n) s.
 
 
 (* END *)
-Definition base (s:string) : sensor_state := PMap.init (nv (PMap.init l_fail)).
+Definition base: sensor_state := PMap.init (nv (PMap.init l_fail)).
 
 (*Definition contains (s:string) (old:sensor_state): bool := 
 match (PMap.get (string_to_pos s) old) with 

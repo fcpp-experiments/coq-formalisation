@@ -31,7 +31,7 @@ Inductive bigstep : conf_in -> conf_out -> Prop :=
              (w:nvalue), w_value w -> <[ id | sigma | env | <{w}> ]> ==> <[ <{w}> | empty nil ]> 
 
   | E_LIT : forall (id:ident) (sigma:sensor_state) (env:value_tree_env) 
-            (l:literal), value l -> <[ id | sigma | env | <{l}> ]>  ==>  <[ <{[> l]}> | empty nil ]> 
+            (l:literal), value l -> <[ id | sigma | env | <{l}> ]>  ==>  <[ <{[>'' l]}> | empty nil ]> 
 
   | E_VAR : forall (id:ident) (sigma:sensor_state) (env:value_tree_env)
             (w: nvalue) x,
@@ -56,7 +56,7 @@ Inductive bigstep : conf_in -> conf_out -> Prop :=
             w_value w1 ->
             <[ id | sigma | pi_env 2 (select_f env f)  | <{f w1}> ]> ==> <[ <{w2}> | theta2 ]> ->
             w_value w2 -> 
-            <[ id | sigma | env | <{e0 e1}> ]> ==> <[ <{w2}> | some <{[>f]}> (cons theta0 (cons theta1 (cons theta2 nil))) ]>  
+            <[ id | sigma | env | <{e0 e1}> ]> ==> <[ <{w2}> | some <{[>''f]}> (cons theta0 (cons theta1 (cons theta2 nil))) ]>  
 
   | A_FUN : forall (id:ident) (sigma:sensor_state) (env:value_tree_env) (theta:value_tree)
             n x type e (w_in:nvalue) (w_out:nvalue),

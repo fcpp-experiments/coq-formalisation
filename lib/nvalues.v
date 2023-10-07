@@ -40,8 +40,8 @@ Fixpoint pointWise (op:literal -> literal -> literal) (w0:nvalue) {struct w0}: n
     | nv (e1,t1), nv (e2,t2) => nv (op e1 e2, PTree.combine
                                                 (fun x y => match x,y with
                                                             | None, None => None
-                                                            | None, Some z => Some z
-                                                            | Some z, None => Some z
+                                                            | None, Some z => Some (op e1 z)
+                                                            | Some z, None => Some (op z e2)
                                                             | Some zx, Some zy => Some (op zx zy)
                                                             end)
                                                 t1 t2)

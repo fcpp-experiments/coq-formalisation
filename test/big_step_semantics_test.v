@@ -4,6 +4,7 @@ From AC Require Import sensor_state.
 From AC Require Import value_tree.
 From AC Require Import basics.
 From AC Require Import nvalues.
+Require Import Lia.
 Require Import String.
 
 (*NOTATION*)
@@ -14,23 +15,31 @@ Definition n : string := "n".
 Definition fun0: string := "fun0". 
 Definition fun1: string := "fun1". 
 
+(*
 Hint Unfold x : core.
 Hint Unfold y : core.
 Hint Unfold z : core.
+ *)
 
-Lemma multiplication: <[ 10 | base | vt_end |   <{mult ([2>>5][>5]) ([1>>5][>6]) }> ]> ==> <[ <{ [1>>25][2>>30][>30]}> | empty nil ]>.
+Lemma multiplication: <[ 10 | base | vt_end |   <{mult ([2>>'5][>'5]) ([1>>'5][>'6]) }> ]> ==> <[ <{ [1>>'25][2>>'30][>'30]}> | empty nil ]>.
 Proof.
 apply A_MULT.
--split. apply ordered1. simpl. auto.
--split. apply ordered1. simpl. auto.
--split. apply ordered2. auto. apply ordered1. simpl. auto.
--simpl. apply E_NVAL. 
-split. apply ordered2. auto. apply ordered1. simpl. auto.
+-split. simpl. tauto.
+ simpl. intros. destruct H. rewrite <- H. tauto.
+ destruct H.
+-split. simpl. tauto.
+ simpl. intros. destruct H. rewrite <- H. tauto.
+ destruct H.
+- simpl.  compute. apply E_NVAL. compute. split.
+  + tauto. + intros. destruct x0; tauto.
+- compute. split. tauto. intros. destruct x0; tauto.
 Qed.
 
-Lemma fold00: <[ 4 | base | vt_el 2 (empty nil) (vt_el 3 (empty nil) (vt_end)) | <{ nfold ([> fun fun0[x:Nat] {fun fun0[y:Nat] {mult x y} }]) ([2>>4][3>>5][>6]) ([>7]) }> ]> ==> <[ <{[>140]}> | empty nil ]>.
+Lemma fold00: <[ 4 | base | vt_el 2 (empty nil) (vt_el 3 (empty nil) (vt_end)) | <{ nfold ([> fun fun0[x:Nat] {fun fun0[y:Nat] {mult x y} }]) ([2>>'4][3>>'5][>'6]) ([>'7]) }> ]> ==> <[ <{[>'140]}> | empty nil ]>.
 Proof.
-eapply A_FOLD.
+  simpl.
+  Check A_FOLD.
+  apply A_FOLD.
 -split. 
 + apply ordered0.
 + simpl. auto.
